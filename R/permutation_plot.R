@@ -28,14 +28,14 @@ permutation_plot <- function(
 	## Mark the significant results.
 	plot_data[, significance := ifelse(
 		FDR < FDR_threshold & abs(obs_log2FD) > log2FD_threshold,
-		paste("FDR <", FDR_threshold, "& abs(Log2FD) >", round(log2FD_threshold, 3)),
+		paste("FDR <", FDR_threshold, "& abs(Log2FD) >", round(log2FD_threshold, 2)),
 		"n.s."
 	)]
 
-	plot_data[, significance := factor(significance, levels = (
-		paste("FDR <", FDR_threshold, "& abs(Log2FD) >", round(log2FD_threshold, 3)),
+	plot_data[, significance := factor(significance, levels = c(
+		paste("FDR <", FDR_threshold, "& abs(Log2FD) >", round(log2FD_threshold, 2)),
 		"n.s."
-	)]
+	))]
 
 	## Order the clusters by observed log2FD if requested.
 	if (order_clusters) {
