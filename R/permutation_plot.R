@@ -51,4 +51,6 @@ permutation_plot <- function(
 		geom_hline(yintercept = 0) +
 		scale_color_manual(values = c("salmon", "grey")) +
 		coord_flip()
+
+	return(p)
 }
