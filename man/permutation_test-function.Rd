@@ -6,6 +6,7 @@
 \usage{
 permutation_test(
   sc_utils_obj,
+  cluster_identity = NA,
   sample_1 = NA,
   sample_2 = NA,
   sample_identity = "orig.ident",
@@ -15,6 +16,8 @@ permutation_test(
 \arguments{
 \item{sc_utils_obj}{sc_utils object}
 
+\item{cluster_identity}{Column that has cluster names}
+
 \item{sample_1}{First sample to compare (ie. control)}
 
 \item{sample_2}{Sample to compare to first sample (ie. treatment)}
@@ -22,8 +25,6 @@ permutation_test(
 \item{sample_identity}{Column that has sample names}
 
 \item{n_permutations}{Number of permutations}
-
-\item{cluster_identity}{Column that has cluster names}
 }
 \description{
 Permutation Test For Proportions

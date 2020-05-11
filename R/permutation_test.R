@@ -14,6 +14,7 @@
 
 permutation_test <- function(
 	sc_utils_obj,
+	cluster_identity = NA,
 	sample_1 = NA,
 	sample_2 = NA,
 	sample_identity = "orig.ident",
@@ -34,6 +35,9 @@ permutation_test <- function(
 		new = c("samples", "clusters")
 	)
 
+	meta_data[, clusters := as.character(clusters)]
+	cluster_cases <- unique(meta_data[["clusters"]])
+
 	## Get observed differences in fraction.
 	obs_diff <- meta_data[, .(count = .N), by = .(samples, clusters)]
 	obs_diff[, fraction := count / sum(count), by = samples]
@@ -42,13 +46,14 @@ permutation_test <- function(
 
 	## Permutation test.
 	perm_results <- matrix(NA, nrow(obs_diff), n_permutations)
+	rownames(perm_results)
 
 	for (i in seq_len(n_permutations)) {
 		permuted <- copy(meta_data)
 		permuted[["samples"]] <- sample(permuted[["samples"]])
 		permuted <- permuted[, .(count = .N), by = .(samples, clusters)]
 		permuted <- permuted[
-			CJ(samples = samples, clusters = clusters, unique = TRUE),
+			CJ(samples = samples, clusters = cluster_cases, unique = TRUE),
 			on = .(samples, clusters)
 		][
 			is.na(count), count := 0
@@ -68,6 +73,35 @@ permutation_test <- function(
 
 	obs_diff[, pval := ifelse(obs_log2FD > 0, increased[.I], decreased[.I])]
 	obs_diff[, FDR := p.adjust(pval, "fdr")]
+
+	## Boostrap log2FD CI.
+	boot_results <- matrix(NA, nrow(obs_diff), n_permutations)
+	rownames(boot_results) <- sort(cluster_cases)
+
+	for (i in seq_len(n_permutations)) {
+		booted <- copy(meta_data)
+		booted[, clusters := sample(clusters, replace = TRUE), by = samples]
+		booted <- booted[, .(count = .N), by = .(samples, clusters)]
+		booted <- booted[
+			CJ(samples = samples, clusters = cluster_cases, unique = TRUE),
+			on = .(samples, clusters)
+		][
+			is.na(count), count := 0
+		][]
+		booted[, fraction := count / sum(count), by = samples]
+		booted <- dcast(booted, clusters ~ samples, value.var = "fraction")
+		booted[, boot_log2FD := log2(get(sample_2)) - log2(get(sample_1))]
+
+		boot_results[, i] <- booted[["boot_log2FD"]]
+	}
+
+	boot_mean <- rowMeans(boot_results)
+	boot_ci <- t(apply(boot_results, 1, function(x) quantile(x, probs = c(0.025, 0.975))))
+	boot_ci <- as.data.table(boot_ci)
+	setnames(boot_ci, old = c(1, 2), new = c("boot_CI_2.5", "boot_CI_97.5"))
+
+	obs_diff[, boot_mean_log2FD := boot_mean]
+	obs_diff <- cbind(obs_diff, boot_ci)
 
 	## Store results and return object.
 	sc_utils_obj@results$permutation <- obs_diff
