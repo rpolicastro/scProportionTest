@@ -71,10 +71,10 @@ permutation_test <- function(
 		perm_results[, i] <- permuted[["perm_log2FD"]]
 	}
 
-	increased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] < x))
+	increased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] <= x))
 	increased <- (increased + 1) / (n_permutations + 1)
 
-	decreased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] > x))
+	decreased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] >= x))
 	decreased <- (decreased + 1) / (n_permutations + 1)
 
 	obs_diff[, pval := ifelse(obs_log2FD > 0, increased[.I], decreased[.I])]
