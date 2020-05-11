@@ -40,6 +40,12 @@ permutation_test <- function(
 
 	## Get observed differences in fraction.
 	obs_diff <- meta_data[, .(count = .N), by = .(samples, clusters)]
+	obs_diff <- obs_diff[
+		CJ(samples = samples, clusters = cluster_cases, unique = TRUE),
+		on = .(samples, clusters)
+	][
+		is.na(count), count := 0
+	][]
 	obs_diff[, fraction := count / sum(count), by = samples]
 	obs_diff <- dcast(obs_diff, clusters ~ samples, value.var = "fraction")
 	obs_diff[, obs_log2FD := log2(get(sample_2)) - log2(get(sample_1))]
