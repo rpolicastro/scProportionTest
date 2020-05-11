@@ -101,6 +101,7 @@ permutation_test <- function(
 		boot_results[, i] <- booted[["boot_log2FD"]]
 	}
 
+	boot_results[!is.finite(boot_results)] <- NA
 	boot_mean <- rowMeans(boot_results, na.rm = TRUE)
 	boot_ci <- t(apply(boot_results, 1, function(x) quantile(x, probs = c(0.025, 0.975), na.rm = TRUE)))
 	boot_ci <- as.data.table(boot_ci)

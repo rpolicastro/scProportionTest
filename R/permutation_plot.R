@@ -2,7 +2,7 @@
 #' Plot Permutation Results
 #'
 #' @importFrom forcats fct_reorder
-#' @importFrom dplyr desc
+#' @importFrom dplyr desc case_when
 #' @importFrom ggplot2 ggplot aes geom_pointrange theme_bw geom_hline
 #' coord_flip scale_color_manual
 #'
