@@ -95,8 +95,8 @@ permutation_test <- function(
 		boot_results[, i] <- booted[["boot_log2FD"]]
 	}
 
-	boot_mean <- rowMeans(boot_results)
-	boot_ci <- t(apply(boot_results, 1, function(x) quantile(x, probs = c(0.025, 0.975))))
+	boot_mean <- rowMeans(boot_results, na.rm = TRUE)
+	boot_ci <- t(apply(boot_results, 1, function(x) quantile(x, probs = c(0.025, 0.975), na.rm = TRUE)))
 	boot_ci <- as.data.table(boot_ci)
 	setnames(boot_ci, old = c(1, 2), new = c("boot_CI_2.5", "boot_CI_97.5"))
 
