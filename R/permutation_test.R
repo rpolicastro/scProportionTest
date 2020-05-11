@@ -46,7 +46,7 @@ permutation_test <- function(
 
 	## Permutation test.
 	perm_results <- matrix(NA, nrow(obs_diff), n_permutations)
-	rownames(perm_results)
+	rownames(perm_results) <- sort(cluster_cases)
 
 	for (i in seq_len(n_permutations)) {
 		permuted <- copy(meta_data)
@@ -65,11 +65,11 @@ permutation_test <- function(
 		perm_results[, i] <- permuted[["perm_log2FD"]]
 	}
 
-	increased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] > x))
+	increased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] < x))
 	increased <- (increased + 1) / (n_permutations + 1)
 
-	decreased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] < x))
-	decreased <- (increased + 1) / (n_permutations + 1)
+	decreased <- rowSums(apply(perm_results, 2, function(x) obs_diff[["obs_log2FD"]] > x))
+	decreased <- (decreased + 1) / (n_permutations + 1)
 
 	obs_diff[, pval := ifelse(obs_log2FD > 0, increased[.I], decreased[.I])]
 	obs_diff[, FDR := p.adjust(pval, "fdr")]
