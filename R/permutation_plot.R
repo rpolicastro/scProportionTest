@@ -16,7 +16,7 @@
 #' @export
 
 permutation_plot <- function(
-	sc_utils_object,
+	sc_utils_obj,
 	FDR_threshold = 0.05,
 	log2FD_threshold = log2(1.5),
 	order_clusters = TRUE

@@ -5,20 +5,20 @@
 \title{Plot Permutation Results}
 \usage{
 permutation_plot(
-  sc_utils_object,
+  sc_utils_obj,
   FDR_threshold = 0.05,
   log2FD_threshold = log2(1.5),
   order_clusters = TRUE
 )
 }
 \arguments{
+\item{sc_utils_obj}{sc_utils object}
+
 \item{FDR_threshold}{FDR value cutoff for significance}
 
 \item{log2FD_threshold}{Absolute value of log2FD cutoff for significance}
 
 \item{order_clusters}{Whether to order the clusters by observed log2FD}
-
-\item{sc_utils_obj}{sc_utils object}
 }
 \description{
 Plot Permutation Results
