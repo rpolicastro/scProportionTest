@@ -2,7 +2,7 @@
 
 This R library facilitates the analysis of the difference between the proprotion of cells
 in clusters between two scRNA-seq samples.
-A permutation test is used to calculate a p-values for each cluster,
+A permutation test is used to calculate a p-value for each cluster,
 and a confidence interval for the magnitude difference is returned via bootstrapping.
 There is also a function to generate a point range plot to display the results.
 
@@ -21,7 +21,7 @@ This means that you must first process your data in seurat.
 Seurat has various [vignettes](https://satijalab.org/seurat/vignettes.html) to get you started.
 
 Once you have a seurat object, you are ready to get started.
-We'll first load some example data for the vignette, adn create the analysis object.
+We'll first load some example data for the vignette, and create the analysis object.
 
 ```
 library("scProportionTest")
