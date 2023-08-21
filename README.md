@@ -4,7 +4,9 @@ This R library facilitates the analysis of the difference between the proprotion
 in clusters between two scRNA-seq samples.
 A permutation test is used to calculate a p-value for each cluster,
 and a confidence interval for the magnitude difference is returned via bootstrapping.
-There is also a function to generate a point range plot to display the results.
+There is also a function to generate a point range plot to display the results. If you 
+are working with an AnnData object you may consider the 
+[python implementation](https://github.com/SamuelAMiller1/py-scProportionTest/tree/main).
 
 ## Library Installation
 
@@ -49,3 +51,7 @@ permutation_plot(prop_test)
 ```
 
 ![example_plot](inst/images/example_plot.png)
+
+## Citing
+
+Miller SA, Policastro RA, Sriramkumar S, Lai T, Huntington TD, Ladaika CA, Kim D, Hao C, Zentner GE, O'Hagan HM. LSD1 and Aberrant DNA Methylation Mediate Persistence of Enteroendocrine Progenitors That Support BRAF-Mutant Colorectal Cancer. Cancer Res. 2021 Jul 15;81(14):3791-3805. doi: 10.1158/0008-5472.CAN-20-3562. Epub 2021 May 25. PMID: 34035083; PMCID: PMC8513805.
